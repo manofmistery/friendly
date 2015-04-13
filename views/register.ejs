@@ -1,0 +1,29 @@
+<html>
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/signin.css">
+	<title>WallOfSpam - Register</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	
+	<body>
+		<div class="container">
+		
+			<form class="form-signin" action="/signup" method="POST">
+			<h2 class="form-signin-heading">Friendly</h2>
+			
+				<input type="text" name="username" class="form-control" placeholder="Username" required autofocus></input>
+				<input type="text" name="password" class="form-control" placeholder="Password" required></input>
+				<button class="btn btn-lg btn-primary" type="submit">Register</button>
+			</form>
+			<!-- express-flash -->
+			<% if ( message ) { %>
+			<div class="flash"><%= message %></div>
+			<% } %>
+			
+		
+		
+		
+	
+	</body>
+	</html>

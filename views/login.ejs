@@ -1,0 +1,29 @@
+<html>
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/signin.css">
+	<title>Friendly</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	
+	<body>
+		<div class="container">
+		
+			<form class="form-signin" action="/login" method="POST">
+			<h2 class="form-signin-heading">Friendly Alpha</h2>
+				<input type="text" name="username" class="form-control" placeholder="Username" required autofocus></input>
+				<input type="password" name="password" class="form-control" placeholder="Password" required></input>
+				<button class="btn btn-lg btn-primary" type="submit">Login</button> <a href="/signup">New account</a>
+			<!-- express-flash -->
+			<% if ( message ) { %>
+			<div class="flash"><%= message %></div>
+			<% } %>
+			
+			</form>
+			
+		
+		
+		
+	
+	</body>
+	</html>

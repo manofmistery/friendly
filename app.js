@@ -10,6 +10,24 @@ var users = require('./routes/users');
 
 var app = express();
 
+var mongoose = require('./config/mongoose.js');
+var app = express();
+var db = mongoose();
+
+//Passport
+var passport = require('passport');
+var expressSession = require('express-session');
+app.use(expressSession({secret: 'jiodasjd0s9012dzzz'}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+var flash = require('connect-flash');
+app.use(flash());
+
+var initPassport = require('./passport/init');
+initPassport(passport);
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
