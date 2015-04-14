@@ -47,6 +47,14 @@
             android:id="@+id/newusrbtn"
             android:layout_gravity="right|center_vertical"
             android:visibility="invisible" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="487dp"
+            android:text="@string/debug"
+            android:id="@+id/debug"
+            android:layout_gravity="left|top"
+            android:visibility="invisible" />
     </FrameLayout>
 
 </RelativeLayout>
