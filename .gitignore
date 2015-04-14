@@ -1,2 +1,5 @@
 node_modules
 bower_components
+android/build
+android/.gradle
+android/.DS_Store
