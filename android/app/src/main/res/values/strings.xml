@@ -8,5 +8,6 @@
     <string name="publish">Publish location</string>
     <string name="newuser">New User</string>
     <string name="version">0.1</string>
-    <string name="debug">Debug</string>
+    <string name="debug">Debug data from server:</string>
+    <string name="location">Test</string>
 </resources>

@@ -12,6 +12,7 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,8 +23,9 @@ public class MainActivity extends ActionBarActivity {
 
     utils Utils = null;
     final long interval_delay = 60; //Delay between requests. In seconds, read from config.
-    final boolean app_enabled = true;
-    TextView debug;
+    boolean app_enabled = true;
+    TextView debug,geoloc;
+    CheckBox enabled;
     private String username;
     //runs without a timer by reposting this handler at the end of the runnable
 
@@ -34,6 +36,8 @@ public class MainActivity extends ActionBarActivity {
 
         // call AsynTask to perform network operation on separate thread
         new HttpAsyncTask().execute(url);
+       // geoloc.setText(pos.getLatitude()+"\n"+pos.getLongitude());
+        geoloc.setText(String.format("%.4f  %.4f", pos.getLatitude(), pos.getLongitude()));
     }
 
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
@@ -47,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
         protected void onPostExecute(String result) {
             //Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
             //etResponse.setText(result);
-            debug.setText(result);
+            debug.append("\nserv: "+result);
         }
     }
 
@@ -83,9 +87,11 @@ public class MainActivity extends ActionBarActivity {
 
         final EditText usrText = (EditText) findViewById(R.id.usrNameText);
         final Button newUserBtn = (Button) findViewById(R.id.newusrbtn);
+
         final Context mContext = getApplicationContext();
         debug= (TextView)findViewById(R.id.debug);
-
+        geoloc = (TextView)findViewById(R.id.geoloc);
+        enabled = (CheckBox)findViewById(R.id.enabledBox);
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Utils = new utils(locationManager);
 
@@ -96,6 +102,8 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 String usrname = usrText.getText().toString();
 
+                //@TODO: Send GET request to server, and check if username is availible.
+
                 Toast.makeText(getApplicationContext(), "Username: " + usrname,
                         Toast.LENGTH_SHORT).show();
                 // Log.e("ReadWrite", "Username input: " + usrname);
@@ -104,7 +112,26 @@ public class MainActivity extends ActionBarActivity {
                 usr.setText(Utils.readUserName(mContext));
                 usrText.setVisibility(View.INVISIBLE);
                 newUserBtn.setVisibility(View.INVISIBLE);
+
+                //Start main thread, sends GPS location every X minutes
+                timerHandler.postDelayed(timerRunnable, 0);
+                app_enabled=true;
             }
+        });
+
+        //Add eventlistener to Enabled Checkbox
+        enabled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //set app_enabled to checkbox state
+                app_enabled = ((CheckBox)v).isChecked();
+                if(app_enabled) {
+                    debug.append("\napp_enabled: true ");
+                    //timerHandler.postDelayed(this, interval_delay * 1000); --- hmmm.
+                }
+
+            }
+
         });
 
 
@@ -115,6 +142,7 @@ public class MainActivity extends ActionBarActivity {
 
             usrText.setVisibility(View.VISIBLE);
             newUserBtn.setVisibility(View.VISIBLE);
+            app_enabled = false;
 
         } else {
             //Read username from file, display info
@@ -122,11 +150,14 @@ public class MainActivity extends ActionBarActivity {
             username = Utils.readUserName(mContext);
             usr.setText(username);
             debug.setVisibility(View.VISIBLE);
+
+            //Start main thread, sends GPS location every X minutes
+            timerHandler.postDelayed(timerRunnable, 0);
+            app_enabled=true;
         }
 
 
-        //Start main thread, sends GPS location every X minutes
-        timerHandler.postDelayed(timerRunnable, 0);
+
     }
 
     private void toast(String msg){
