@@ -21,7 +21,7 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity {
 
     utils Utils = null;
-    final long interval_delay = 10; //Delay between requests. In seconds, read from config.
+    final long interval_delay = 60; //Delay between requests. In seconds, read from config.
     final boolean app_enabled = true;
     TextView debug;
     private String username;
