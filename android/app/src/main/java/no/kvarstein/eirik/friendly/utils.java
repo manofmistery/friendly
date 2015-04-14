@@ -2,6 +2,8 @@ package no.kvarstein.eirik.friendly;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 
 import java.io.*;
@@ -12,9 +14,23 @@ import java.io.*;
 
 public class utils{
    //Contains utility functions, reading/writing files etc.
+   private LocationManager locationManager;
+    public utils(LocationManager manager){
+        this.locationManager = manager; //pass GPS Location manager from MainActivity
 
-    public utils(){
+    }
 
+    public Location getLastPos(){
+        String locationProvider = LocationManager.GPS_PROVIDER; //NETWORK_PROVIDER
+        // Or use LocationManager.GPS_PROVIDER
+
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+        if(lastKnownLocation == null){
+            lastKnownLocation.setLatitude(0);
+            lastKnownLocation.setAltitude(100);
+            lastKnownLocation.setLongitude(0);
+        }
+        return lastKnownLocation;
     }
 
 

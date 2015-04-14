@@ -1,6 +1,8 @@
 package no.kvarstein.eirik.friendly;
 
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,11 +23,12 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final utils Utils = new utils();
+
         final EditText usrText = (EditText)findViewById(R.id.usrNameText);
         final Button newUserBtn = (Button)findViewById(R.id.newusrbtn);
         final Context mContext = getApplicationContext();
-
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        final utils Utils = new utils(locationManager);
         //Hook up our new User button to a method.
         newUserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +63,17 @@ public class MainActivity extends ActionBarActivity {
         }
 
 
+        //Test location
+        Location test = Utils.getLastPos();
+       // String nfo = test.getLatitude() + ", "+test.getLongitude() + " alt: "+test.getAltitude();
+        String nfo = String.format("%.5f, %.5f, %.5f", test.getLatitude(), test.getLongitude(), test.getAltitude());
+        toast(nfo);
+
+    }
+
+    private void toast(String msg){
+        Toast.makeText(getApplicationContext(), msg,
+                Toast.LENGTH_SHORT).show();
     }
 
 
