@@ -30,7 +30,8 @@ router.get('/loc/:username/:latitude/:longitude', function(req,res,next){
     //Lookup info using geocoder
     // Reverse Geocoding
     geocoder.reverseGeocode(lat, lon, function ( err, data ) {
-      console.dir(data);
+     // console.dir(data);
+     console.log(data.results[0].formatted_address);
      });
 
     res.send("OK");
