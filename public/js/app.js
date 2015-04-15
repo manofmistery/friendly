@@ -9,9 +9,9 @@ app.controller('MainCtrl', function($scope, $http) {
 app.controller('MapCtrl', function ($scope, $http) {
 
     var mapOptions = {
-        zoom: 4,
+        zoom: 13,
         center: new google.maps.LatLng( 58.161758, 8.0009),
-        mapTypeId: google.maps.MapTypeId.TERRAIN
+        mapTypeId: google.maps.MapTypeId.HYBRID
     }
 
     $scope.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -27,14 +27,14 @@ app.controller('MapCtrl', function ($scope, $http) {
             position: new google.maps.LatLng(info.latitude, info.longitude),
             title: info.user
         });
-        marker.content = '<div class="infoWindowContent">' + info.desc + '</div>';
+        marker.content = '<div class="infoWindowContent">' + info.user + ' @ '+info.date + '</div>';
 
         google.maps.event.addListener(marker, 'click', function(){
             infoWindow.setContent('<h2>' + marker.title + '</h2>' + marker.content);
             infoWindow.open($scope.map, marker);
         });
 
-        $scope.markers.push(marker);
+        //$scope.markers.push(marker);
 
     }
 
