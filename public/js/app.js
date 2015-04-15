@@ -34,9 +34,33 @@ app.controller('MapCtrl', function ($scope, $http) {
             infoWindow.open($scope.map, marker);
         });
 
-        //$scope.markers.push(marker);
+        $scope.markers.push(marker);
 
     }
+
+    //Fetch last 10 locations, and create a path using polylines
+    var createPath = function(){
+
+        $http.get('/latest/eirik/10').success(function(res){
+            var waypoints = [];
+            var i;
+            //Generate path from json data
+            for(i = 0;i<res.length;i++){
+                console.log("lat: "+res[i].latitude+", lon: "+res[i].longitude);
+                waypoints.push( new google.maps.LatLng(res[i].latitude, res[i].longitude ));
+            }
+         var route = new google.maps.Polyline({
+             path: waypoints,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+            });
+
+    route.setMap($scope.map);
+        });
+    }
+
 
     //Fetch some data using our api
     $http.get('/latest/eirik').success(function(res){
@@ -45,8 +69,7 @@ app.controller('MapCtrl', function ($scope, $http) {
         createMarker(res);
     });
 
-
-
+    createPath();
     $scope.openInfoWindow = function(e, selectedMarker){
         e.preventDefault();
         google.maps.event.trigger(selectedMarker, 'click');

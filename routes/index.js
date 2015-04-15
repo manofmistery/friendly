@@ -24,10 +24,7 @@ router.get('/loc/:username/:latitude/:longitude', function(req,res,next){
     lat = req.params.latitude;
     lon = req.params.longitude;
 
-    console.log("user: "+req.params.username);
-    console.log("Latitude: "+lat);
-    console.log("Longitude: "+lon);
-
+    console.log("Location from "+req.params.username+": "+lat+", "+lon);
 
     //Lookup info using geocoder
     // Reverse Geocoding
@@ -65,6 +62,14 @@ router.get('/latest/:user', function(req, res, next) {
         res.json(doc);
     });
 });
+
+//Return last X positions for user
+router.get('/latest/:user/:x', function(req, res, next){
+    Location.find({user: req.params.user}, {}, {sort: {'date': -1}}).limit(req.params.x).exec(function (err, doc) {
+                res.json(doc);
+                    });
+});
+
 
 router.get('/login', function(req, res, next){
     res.render('login', { message: req.flash('message')});
