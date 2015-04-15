@@ -8,10 +8,11 @@ module.exports = function() {
 
 require('../models/User');
 require('../models/Message');
-
+require('../models/Location');
 
  User = mongoose.model('User');
  Message = mongoose.model('Message');
+ Location = mongoose.model('Location');
  return db;
 
 };

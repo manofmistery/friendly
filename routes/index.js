@@ -19,24 +19,52 @@ router.get('/', isAuthenticated, function(req, res, next) {
 /* Client reporting geo location */
 router.get('/loc/:username/:latitude/:longitude', function(req,res,next){
        
-    console.log("user: "+req.params.username);
-    console.log("Latitude: "+req.params.latitude);
-    console.log("Longitude: "+req.params.longitude);
 
     var lat,lon;
     lat = req.params.latitude;
     lon = req.params.longitude;
 
+    console.log("user: "+req.params.username);
+    console.log("Latitude: "+lat);
+    console.log("Longitude: "+lon);
+
+
     //Lookup info using geocoder
     // Reverse Geocoding
     geocoder.reverseGeocode(lat, lon, function ( err, data ) {
      // console.dir(data);
-     console.log(data.results[0].formatted_address);
+        var address = data.results[0].formatted_address;
+        console.log(address);
+
+        //Save to DB
+        var time = new Date();
+        var loc = new Location({
+           user: req.params.username,
+            latitude: lat,
+            longitude: lon,
+            address: address,
+            date: time
+        });
+
+        loc.save(function(err, doc){
+            if(err) return next(err);
+
+            res.send(address); //send addresss back to app
+        });
+
+
      });
 
-    res.send("OK");
 });
 
+// Return latest position for user
+router.get('/latest/:user', function(req, res, next) {
+
+    //Return latest location update from user.
+    Location.findOne({user: req.params.user}, {}, {sort: {'date': -1}}, function (err, doc) {
+        res.json(doc);
+    });
+});
 
 router.get('/login', function(req, res, next){
     res.render('login', { message: req.flash('message')});
